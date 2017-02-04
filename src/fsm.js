@@ -4,16 +4,16 @@ class FSM {
      * @param config
      */
     constructor(config) {
-       var ConditionsArray=[];
-       this.ConditionsArray=ConditionsArray;
-       var Array=[];
-       this.Array=Array;
-       this.config = config;
-       this.kount=0;
+        var ConditionsArray = [];
+        this.ConditionsArray = ConditionsArray;
+        var Array = [];
+        this.Array = Array;
+        this.config = config;
+        this.kount = 0;
         if (config == undefined) {
             throw new Error();
         }
-      this.state='normal';
+        this.state = 'normal';
 
 
         return this;
@@ -33,18 +33,18 @@ class FSM {
      */
     changeState(state) {
 
-  this.ConditionsArray.push(this.state);
+        this.ConditionsArray.push(this.state);
+        this.Array = [];
         if (
             (state == 'normal') ||
             (state == 'busy') ||
             (state == 'sleeping') ||
             (state == 'hungry')
-        )
-          {this.state = state ;
+        ) {
+            this.state = state;
 
             this.count++;
-          }
-        else {
+        } else {
             throw new Error();
         }
         return this;
@@ -56,98 +56,114 @@ class FSM {
      */
     trigger(event) {
 
-if( this.config.states[this.state].transitions[event]==undefined){
+        if (this.config.states[this.state].transitions[event] == undefined) {
 
-  throw new Error();}
-    else  {
-       this.ConditionsArray.push(this.state);
-      this.state=this.config.states[this.state].transitions[event];
-
-    }
+            throw new Error();
+        } else {
+            this.ConditionsArray.push(this.state);
+            this.state = this.config.states[this.state].transitions[event];
+        }
+        this.Array = [];
         this.count++;
         return this;
-}
+    }
 
-/**
- * Resets FSM state to initial.
- */
-reset() {
-this.state=this.config.initial;
- this.ConditionsArray=[];this.count=0;
+    /**
+     * Resets FSM state to initial.
+     */
+    reset() {
+        this.state = this.config.initial;
+        this.ConditionsArray = [];
+        this.count = 0;
 
-}
+    }
 
-/**
- * Returns an array of states
-  for which there are specified event transition rules.
- * Returns all states if argument is undefined.
- * @param event
- * @returns {Array}
- */
-getStates(event) {
-  var array=['normal','busy','hungry','sleeping'];
-  if(event==undefined){
-    return array;
-  }else {
-  if(event=='get_hungry'){return ['busy','sleeping'];}
-if(event=='get_tired'){return ['busy'];}
-  if(event=='get_up'){return ['sleeping'];}
-if(event=='eat'){return ['hungry'];}
-if(event=='study'){return ['normal'];}
-}if((event!='get_hungry')||
-(event!='get_tired')||
-(event!='get_up')||
-(event!='eat')||
-(event!='study'))
-{return [];}
-}
-/**
- * Goes back to previous state.
- * Returns false if undo is not available.
- * @returns {Boolean}
- */
-undo() {
+    /**
+     * Returns an array of states
+      for which there are specified event transition rules.
+     * Returns all states if argument is undefined.
+     * @param event
+     * @returns {Array}
+     */
+    getStates(event) {
+        var array = ['normal', 'busy', 'hungry', 'sleeping'];
+        if (event == undefined) {
+            return array;
+        } else {
+            if (event == 'get_hungry') {
+                return ['busy', 'sleeping'];
+            }
+            if (event == 'get_tired') {
+                return ['busy'];
+            }
+            if (event == 'get_up') {
+                return ['sleeping'];
+            }
+            if (event == 'eat') {
+                return ['hungry'];
+            }
+            if (event == 'study') {
+                return ['normal'];
+            }
+        }
+        if ((event != 'get_hungry') ||
+            (event != 'get_tired') ||
+            (event != 'get_up') ||
+            (event != 'eat') ||
+            (event != 'study')) {
+            return [];
+        }
+    }
+    /**
+     * Goes back to previous state.
+     * Returns false if undo is not available.
+     * @returns {Boolean}
+     */
+    undo() {
 
-if(this.ConditionsArray[0]!==undefined){
- this.Array.push(this.state);
+        if (this.ConditionsArray[0] !== undefined) {
+            this.Array.push(this.state);
 
-this.state=this.ConditionsArray.pop();
+            this.state = this.ConditionsArray.pop();
 
 
-this.count--;
-  return true;
-}
-//else {if (this.state!=undefined){return true;}
-else {return false;}
-}
+            this.count--;
+            return true;
+        }
+        //else {if (this.state!=undefined){return true;}
+        else {
+            return false;
+        }
+    }
 
-/**
- * Goes redo to state.
- * Returns false if redo is not available.
- * @returns {Boolean}
- */
-redo() {
+    /**
+     * Goes redo to state.
+     * Returns false if redo is not available.
+     * @returns {Boolean}
+     */
+    redo() {
 
-if(this.Array[0]!==undefined){
+        if (this.Array[0] !== undefined) {
 
-  this.state=this.Array.pop();
-this.ConditionsArray.push(this.state);
+            this.state = this.Array.pop();
+            this.ConditionsArray.push(this.state);
 
-    this.count++;
-    return true;
+            this.count++;
+            return true;
 
-}
-else{return false;}
+        } else {
+            return false;
+        }
 
-}
+    }
 
-/**
- * Clears transition history
- */
-clearHistory() {
-   this.ConditionsArray=[];
-    this.Array=[];
-}
+    /**
+     * Clears transition history
+     */
+    clearHistory() {
+        this.ConditionsArray = [];
+        this.Array = [];
+    }
 }
 
 module.exports = FSM;
