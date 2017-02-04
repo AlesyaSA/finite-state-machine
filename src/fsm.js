@@ -4,12 +4,14 @@ class FSM {
      * @param config
      */
     constructor(config) {
+       var ConditionsArray=[];
+       this.ConditionsArray=ConditionsArray
         this.config = config;
         this.kount=0;
         if (config == undefined) {
             throw new Error();
         }
-      this.state='normal';
+      this.state='normal'; this.ConditionsArray.push(this.state);
         return this;
     }
     /**
@@ -27,14 +29,17 @@ class FSM {
      */
     changeState(state) {
 
-        this.state = state;
+
         if (
             (state == 'normal') ||
             (state == 'busy') ||
             (state == 'sleeping') ||
             (state == 'hungry')
         )
-          this.state = this.state;
+          {this.state = state ;
+            this.ConditionsArray.push(this.state);
+            this.count++;
+          }
         else {
             throw new Error();
         }
@@ -50,29 +55,9 @@ class FSM {
 if( this.config.states[this.state].transitions[event]==undefined){
 
   throw new Error();}
-    else  {this.state=this.config.states[this.state].transitions[event];}
-
-/*
-        switch(event){
-          case 'study':
-          this.condition= 'busy';
-          break
-          case 'get_tired':
-          this.condition='sleeping' ;
-          break
-          case 'get_hungry':
-          this.condition='hungry' ;
-          break
-          case 'eat':
-          this.condition= 'normal';
-          break
-          case 'get_up':
-          this.condition='normal' ;
-          break
-          default:
-          {throw new Error();}
-          break
-        }*/
+    else  {this.state=this.config.states[this.state].transitions[event];
+      this.ConditionsArray.push(this.state);
+    }
         this.count++;
         return this;
 }
@@ -82,6 +67,7 @@ if( this.config.states[this.state].transitions[event]==undefined){
  */
 reset() {
 this.state=this.config.initial;
+ this.ConditionsArray=[];this.count=0;
 }
 
 /**
@@ -114,8 +100,15 @@ if(event=='study'){return ['normal'];}
  * @returns {Boolean}
  */
 undo() {
-  if(this.count==0) {return false;}
-  else {return true;}
+
+
+this.count--;
+this.ConditionsArray.pop();
+
+this.state=this.ConditionsArray[1];
+if(this.count==0) {return true;}
+else {return false;}
+
 }
 
 /**
