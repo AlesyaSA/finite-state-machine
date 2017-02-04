@@ -6,12 +6,16 @@ class FSM {
     constructor(config) {
        var ConditionsArray=[];
        this.ConditionsArray=ConditionsArray
+       var LastConditionsArray=[];
+       this.LastConditionsArray=LastConditionsArray
         this.config = config;
         this.kount=0;
         if (config == undefined) {
             throw new Error();
         }
-      this.state='normal'; this.ConditionsArray.push(this.state);
+      this.state='normal';
+      this.LastConditionsArray.push(this.state);
+
         return this;
     }
     /**
@@ -29,7 +33,7 @@ class FSM {
      */
     changeState(state) {
 
-
+  this.ConditionsArray.push(this.state);
         if (
             (state == 'normal') ||
             (state == 'busy') ||
@@ -37,7 +41,7 @@ class FSM {
             (state == 'hungry')
         )
           {this.state = state ;
-            this.ConditionsArray.push(this.state);
+this.LastConditionsArray.push(this.state);
             this.count++;
           }
         else {
@@ -55,8 +59,10 @@ class FSM {
 if( this.config.states[this.state].transitions[event]==undefined){
 
   throw new Error();}
-    else  {this.state=this.config.states[this.state].transitions[event];
-      this.ConditionsArray.push(this.state);
+    else  {
+       this.ConditionsArray.push(this.state);
+      this.state=this.config.states[this.state].transitions[event];
+this.LastConditionsArray.push(this.state);
     }
         this.count++;
         return this;
@@ -68,6 +74,8 @@ if( this.config.states[this.state].transitions[event]==undefined){
 reset() {
 this.state=this.config.initial;
  this.ConditionsArray=[];this.count=0;
+ this.LastConditionsArray=[];
+ this.LastConditionsArray.push(this.state);
 }
 
 /**
@@ -103,12 +111,12 @@ undo() {
 
 
 this.count--;
-this.ConditionsArray.pop();
 
-this.state=this.ConditionsArray[1];
-if(this.count==0) {return true;}
+
+if(this.ConditionsArray[0]!==undefined){
+this.state=this.ConditionsArray.pop();  return true;}
+//else {if (this.state!=undefined){return true;}
 else {return false;}
-
 }
 
 /**
@@ -117,7 +125,7 @@ else {return false;}
  * @returns {Boolean}
  */
 redo() {
-
+this.LastConditionsArray.push(this.state);
 }
 
 /**
