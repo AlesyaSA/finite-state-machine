@@ -5,16 +5,16 @@ class FSM {
      */
     constructor(config) {
        var ConditionsArray=[];
-       this.ConditionsArray=ConditionsArray
-       var LastConditionsArray=[];
-       this.LastConditionsArray=LastConditionsArray
-        this.config = config;
-        this.kount=0;
+       this.ConditionsArray=ConditionsArray;
+       var Array=[];
+       this.Array=Array;
+       this.config = config;
+       this.kount=0;
         if (config == undefined) {
             throw new Error();
         }
       this.state='normal';
-      this.LastConditionsArray.push(this.state);
+
 
         return this;
     }
@@ -41,7 +41,7 @@ class FSM {
             (state == 'hungry')
         )
           {this.state = state ;
-this.LastConditionsArray.push(this.state);
+
             this.count++;
           }
         else {
@@ -62,7 +62,7 @@ if( this.config.states[this.state].transitions[event]==undefined){
     else  {
        this.ConditionsArray.push(this.state);
       this.state=this.config.states[this.state].transitions[event];
-this.LastConditionsArray.push(this.state);
+
     }
         this.count++;
         return this;
@@ -74,8 +74,7 @@ this.LastConditionsArray.push(this.state);
 reset() {
 this.state=this.config.initial;
  this.ConditionsArray=[];this.count=0;
- this.LastConditionsArray=[];
- this.LastConditionsArray.push(this.state);
+
 }
 
 /**
@@ -109,12 +108,15 @@ if(event=='study'){return ['normal'];}
  */
 undo() {
 
+if(this.ConditionsArray[0]!==undefined){
+ this.Array.push(this.state);
+
+this.state=this.ConditionsArray.pop();
+
 
 this.count--;
-
-
-if(this.ConditionsArray[0]!==undefined){
-this.state=this.ConditionsArray.pop();  return true;}
+  return true;
+}
 //else {if (this.state!=undefined){return true;}
 else {return false;}
 }
@@ -125,13 +127,27 @@ else {return false;}
  * @returns {Boolean}
  */
 redo() {
-this.LastConditionsArray.push(this.state);
+
+if(this.Array[0]!==undefined){
+
+  this.state=this.Array.pop();
+this.ConditionsArray.push(this.state);
+
+    this.count++;
+    return true;
+
+}
+else{return false;}
+
 }
 
 /**
  * Clears transition history
  */
-clearHistory() {}
+clearHistory() {
+   this.ConditionsArray=[];
+    this.Array=[];
+}
 }
 
 module.exports = FSM;
