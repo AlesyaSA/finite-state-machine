@@ -44,11 +44,12 @@ class FSM {
      * @param event
      */
     trigger(event) {
+
         switch(event){
           case 'study':
           this.config.initial= 'busy';
           break
-          case 'get-tired':
+          case 'get_tired':
           this.config.initial='sleeping' ;
           break
           case 'get_hungry':
@@ -57,10 +58,14 @@ class FSM {
           case 'eat':
           this.config.initial= 'normal';
           break
-          case 'get-up':
+          case 'get_up':
           this.config.initial='normal' ;
           break
+          default:
+          {throw new Error();}
+          break
         }
+        return this;
 }
 
 /**
