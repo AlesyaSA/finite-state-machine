@@ -9,6 +9,7 @@ class FSM {
         if (config == undefined) {
             throw new Error();
         }
+      this.state='normal';
         return this;
     }
     /**
@@ -17,7 +18,7 @@ class FSM {
      */
     getState() {
 
-        return this.config.initial;
+        return this.state;
     }
 
     /**
@@ -33,7 +34,7 @@ class FSM {
             (state == 'sleeping') ||
             (state == 'hungry')
         )
-            this.config.initial = this.state;
+          this.state = this.state;
         else {
             throw new Error();
         }
@@ -46,26 +47,32 @@ class FSM {
      */
     trigger(event) {
 
+if( this.config.states[this.state].transitions[event]==undefined){
+
+  throw new Error();}
+    else  {this.state=this.config.states[this.state].transitions[event];}
+
+/*
         switch(event){
           case 'study':
-          this.config.initial= 'busy';
+          this.condition= 'busy';
           break
           case 'get_tired':
-          this.config.initial='sleeping' ;
+          this.condition='sleeping' ;
           break
           case 'get_hungry':
-          this.config.initial='hungry' ;
+          this.condition='hungry' ;
           break
           case 'eat':
-          this.config.initial= 'normal';
+          this.condition= 'normal';
           break
           case 'get_up':
-          this.config.initial='normal' ;
+          this.condition='normal' ;
           break
           default:
           {throw new Error();}
           break
-        }
+        }*/
         this.count++;
         return this;
 }
@@ -74,7 +81,7 @@ class FSM {
  * Resets FSM state to initial.
  */
 reset() {
-  this.config.initial='normal';
+this.state=this.config.initial;
 }
 
 /**
@@ -116,7 +123,9 @@ undo() {
  * Returns false if redo is not available.
  * @returns {Boolean}
  */
-redo() {}
+redo() {
+
+}
 
 /**
  * Clears transition history
