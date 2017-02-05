@@ -35,12 +35,8 @@ class FSM {
 
         this.ConditionsArray.push(this.state);
         this.Array = [];
-        if (
-            (state == 'normal') ||
-            (state == 'busy') ||
-            (state == 'sleeping') ||
-            (state == 'hungry')
-        ) {
+
+        if ((state in this.config.states) == true) {
             this.state = state;
 
             this.count++;
