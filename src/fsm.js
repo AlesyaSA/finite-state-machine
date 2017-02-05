@@ -13,7 +13,7 @@ class FSM {
         if (config == undefined) {
             throw new Error();
         }
-        this.state = 'normal';
+        this.state = this.config.initial;
 
 
         return this;
