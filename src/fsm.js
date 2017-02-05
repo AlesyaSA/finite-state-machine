@@ -82,43 +82,20 @@ class FSM {
      * @returns {Array}
      */
     getStates(event) {
-      var array=[];
-
-      //  var array = ['normal', 'busy', 'hungry', 'sleeping'];
-        /*
+        var array = [];
         if (event == undefined) {
-            return array;
+            for (var a in this.config.states) {
+                array.push(a);
+            }
         } else {
-            if (event == 'get_hungry') {
-                return ['busy', 'sleeping'];
-            }
-            if (event == 'get_tired') {
-                return ['busy'];
-            }
-            if (event == 'get_up') {
-                return ['sleeping'];
-            }
-            if (event == 'eat') {
-                return ['hungry'];
-            }
-            if (event == 'study') {
-                return ['normal'];
+            for (var a in this.config.states) {
+
+                if ((event in this.config.states[a].transitions) == true) {
+                    array.push(a);
+                }
             }
         }
-        */
-        for (var a in this.config.states){
-        //  for (var b in this.config.states[a].transitions){
-        if ((event in this.config.states[a].transitions) == true) {
-array.push(a);
-
-        //for(var event in this.config.states[a].transitions){
-        //  array.push(a);
-
-        }
-        
-      }
-      return array;
-
+        return array;
     }
     /**
      * Goes back to previous state.
