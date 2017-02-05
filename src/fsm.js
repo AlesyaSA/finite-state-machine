@@ -102,11 +102,12 @@ class FSM {
                 return ['normal'];
             }
         }
-        if ((event != 'get_hungry') ||
+      if((event in  this.config.states[this.state].transitions)==false)
+      /*  if ((event != 'get_hungry') ||
             (event != 'get_tired') ||
             (event != 'get_up') ||
             (event != 'eat') ||
-            (event != 'study')) {
+            (event != 'study'))*/ {
             return [];
         }
     }
